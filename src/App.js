@@ -6,9 +6,9 @@ class App extends Component {
 
   state = {
     books: [
-      {bookName: "1984", writter: "George Orwell"},
-      {bookName: "The Da Vinchi Code", writter: "Dan Brown"},
-      {bookName: "The Alchemist", writter: "Paulo Coelho"}
+      {id: 1, bookName: "1984", writter: "George Orwell"},
+      {id: 2, bookName: "The Da Vinchi Code", writter: "Dan Brown"},
+      {id: 3, bookName: "The Alchemist", writter: "Paulo Coelho"}
     ]
   }
 
@@ -32,6 +32,17 @@ class App extends Component {
     });
   }
 
+  deleteBookState = (index) => {
+    //const books = this.state.books.slice();
+    //const books = this.state.books.map(item);
+    const books = [...this.state.books];
+    books.splice(index, 1);
+    this.setState({
+      books : books
+    });
+  }
+
+
   render(){
     const style ={
       border: "1px solid red",
@@ -40,22 +51,23 @@ class App extends Component {
       color: "white"
     };
 
+    const booksStates = this.state.books;
+    const books = booksStates.map((book,index) =>{
+      return(
+        <Book 
+          bookName={book.bookName}
+          writter = {book.writter}
+          deleteState = {() => this.deleteBookState(index)}
+          key = {book.id}
+        />
+      );
+    });
+
     return(
       <div className="App">
         <h1 style={style}>Book List</h1>
-        <button onClick={this.changeBookName.bind(this, "Nineteen Eighty-Four")}>Change Book Name</button>
-
-        <input type="text" onChange={this.changeWithInputState} />
-
-        <Book
-         bookName={this.state.books[0].bookName} 
-         writter={this.state.books[0].writter} 
-         inputName = {this.changeWithInputState}/>
-        <Book bookName={this.state.books[1].bookName}
-         writter={this.state.books[1].writter}/>
-        <Book bookName={this.state.books[2].bookName}
-         writter={this.state.books[2].writter}
-         change = {this.changeBookName.bind(this, "Nineteen 84")} />
+        {books}
+        
       </div>
     );
   }
